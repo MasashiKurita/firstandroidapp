@@ -2,51 +2,61 @@ package com.firstandroidapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.model.GraphUser;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity {
+		
+	private MainFragment mainFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if (savedInstanceState == null) {
+			// Add the fragment on initial activity setup
+			mainFragment = new MainFragment();
+			getSupportFragmentManager()
+			.beginTransaction()
+			.add(android.R.id.content, mainFragment)
+			.commit();
+		} else {
+			// Or set the fragment from restored state info
+			mainFragment = (MainFragment) getSupportFragmentManager()
+					.findFragmentById(android.R.id.content);
+		}
 		setContentView(R.layout.activity_main);
 		
-		// start Facebook Login
-		System.out.println("start Facebook Login");
-		Session.openActiveSession(this, true, new Session.StatusCallback() {
-			
-			// callback when session changes state
-			@Override
-			public void call(Session session, SessionState State, Exception excption) {
-				if (session.isOpened()) {
-					
-					// make request to the /me API
-					System.out.println("make request to the /me API");
-					Request.newMeRequest(session, new Request.GraphUserCallback() {
-						
-						// call back after Graph API response with user object
-						@Override
-						public void onCompleted(GraphUser user, Response response) {
-							
-							System.out.println("onCompleted");
-							if (user != null) {
-								TextView welcome = (TextView) findViewById(R.id.welcome);
-								welcome.setText("Hello " + user.getName() + "!");
-							}
-						}
-					}).executeAsync();
-				}
-			}
-		});
+//		// start Facebook Login
+//		Log.d(TAG, "start Facebook Login");
+//		Session.openActiveSession(this, true, new Session.StatusCallback() {
+//			
+//			// callback when session changes state
+//			@Override
+//			public void call(Session session, SessionState State, Exception excption) {
+//				if (session.isOpened()) {
+//					
+//					// make request to the /me API
+//					Log.d(TAG, "make request to the /me API");
+//					Request.newMeRequest(session, new Request.GraphUserCallback() {
+//						
+//						// call back after Graph API response with user object
+//						@Override
+//						public void onCompleted(GraphUser user, Response response) {
+//							
+//							Log.d(TAG, "onCompleted");
+//							if (user != null) {
+//								TextView welcome = (TextView) findViewById(R.id.welcome);
+//								welcome.setText("Hello " + user.getName() + "!");
+//							}
+//						}
+//					}).executeAsync();
+//				}
+//			}
+//		});
 	}
 	
 	
