@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
@@ -28,6 +30,8 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.FacebookDialog.PendingCall;
 import com.facebook.widget.LoginButton;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
 
 public class MainFragment extends Fragment {
 
@@ -112,6 +116,44 @@ public class MainFragment extends Fragment {
 		task.execute();
 	}
 	
+	private void publishFeedDialog() {
+		Bundle params = new Bundle();
+		params.putString("name", "Facebook SDK for Android");
+		params.putString("caption", "Build great social apps and get more installs.");
+		params.putString("description", "The Facebook SDK for Android makes it easier and faster to develop Facebook sntegrated Android apps.");
+		params.putString("link", "https://developers.facebook.com/android");
+		params.putString("picture",  "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
+		
+		WebDialog feedDialog = (
+				new WebDialog.FeedDialogBuilder(getActivity(), Session.getActiveSession(), params)
+				.setOnCompleteListener(new OnCompleteListener() {
+					
+					@Override
+					public void onComplete(Bundle values, FacebookException error) {
+						if (error == null) {
+							// When the story is posted, echo the success
+							// and the post Id.
+							final String postId = values.getString("post_id");
+							if (postId != null) {
+								Toast.makeText(getActivity(), "Post story, id: "+postId, Toast.LENGTH_SHORT).show();
+							} else {
+								// User clicked the Cancel button
+								Toast.makeText(getActivity().getApplicationContext(), "Publish cancelled", Toast.LENGTH_SHORT).show();								
+							}
+						} else if (error instanceof FacebookOperationCanceledException) {
+							// User clicked the "x" button
+							Toast.makeText(getActivity().getApplicationContext(), "Publish cancelled", Toast.LENGTH_SHORT).show();
+						} else {
+							// Generic, ex: network error
+							Toast.makeText(getActivity().getApplicationContext(), "Error posting story", Toast.LENGTH_SHORT).show();
+						}
+						
+					}
+				})
+				.build());
+		feedDialog.show();
+	}
+	
 	private boolean isSubsetOf(Collection<String> subset, Collection<String> superset) {
 		for (String string : subset) {
 			if (!superset.contains(string)) {
@@ -155,8 +197,17 @@ public class MainFragment extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				publishStory();
+				//publishStory();
 				
+				if (FacebookDialog.canPresentShareDialog(getActivity().getApplicationContext(), FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+					// publish the post using the Share Dialog
+					FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(getActivity())
+					.setLink("https://developers.facebook.com/android")
+					.build();
+					uiHelper.trackPendingDialogCall(shareDialog.present());
+				} else {
+					publishFeedDialog();	
+				}				
 			}
 		});
 		
