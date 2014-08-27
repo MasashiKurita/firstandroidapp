@@ -82,6 +82,11 @@ public class MainActivity extends FragmentActivity {
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		if (id == R.id.view_posts) {
+			Intent intent = new Intent(this, PostListActivity.class);
+			startActivity(intent);
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 }
