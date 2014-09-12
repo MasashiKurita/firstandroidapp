@@ -36,7 +36,7 @@ import com.facebook.widget.WebDialog.OnCompleteListener;
 public class MainFragment extends Fragment {
 
 	private static final String TAG = "MainFragment";
-	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
+	private static final List<String> PERMISSIONS = Arrays.asList("user_activities", "user_events", "user_location", "user_status", "publish_actions", "manage_pages");
 	private static final String PENDING_PUBLISH_KEY = "pendingPublishReauthorization";
 	private boolean pendingPublishReauthorization = false;
 	
