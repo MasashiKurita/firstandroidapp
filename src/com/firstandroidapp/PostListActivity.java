@@ -88,10 +88,10 @@ public class PostListActivity extends ListActivity {
 			for (int i=0; i<events.length(); i++) {
 				JSONObject event = graphResponse.getJSONObject(events.getString(i));
 				JSONObject venue = event.getJSONObject("venue");
-				String point = "location = " + event.getString("location")
-						     + "venue = ("
-						     + "latitude = " + venue.getString("latitude") 
-						     + "longitude = "+ venue.getString("longitude")
+				String point = "location = " + event.getString("location") + "\n"
+						     + "venue = (\n"
+						     + "latitude = " + venue.getString("latitude") + "\n" 
+						     + "longitude = "+ venue.getString("longitude") + "\n"
 						     + ")";
 				result.add(point);
 			}

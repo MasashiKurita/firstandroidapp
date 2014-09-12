@@ -9,5 +9,6 @@
         android:title="@string/action_settings"
         app:showAsAction="never"/>
     <item android:id="@+id/view_posts" android:title="View Posts"></item>
+    <item android:id="@+id/view_map" android:title="View Map"></item>
 
 </menu>

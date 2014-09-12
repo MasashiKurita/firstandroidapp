@@ -87,6 +87,10 @@ public class MainActivity extends FragmentActivity {
 			startActivity(intent);
 			return true;
 		}
+		if (id == R.id.view_map) {
+			Intent intent = new Intent(this, MapActivity.class);
+			startActivity(intent);
+		}
 		return super.onOptionsItemSelected(item);
 	}
 }
