@@ -31,5 +31,5 @@
         android:visibility="invisible"
         android:text="@string/share"
         />
-
+    
 </LinearLayout>
